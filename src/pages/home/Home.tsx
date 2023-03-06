@@ -8,11 +8,8 @@ import ProductBox from '@/components/product-box/ProductBox';
 
 const Home: FC = () => {
   const navigate = useNavigate();
-
   const products = useProducts();
-  console.log(products);
   
-
   return (
     <div className='p-6'>
       <div className='flex gap-x-10 mb-10'>

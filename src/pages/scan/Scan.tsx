@@ -33,9 +33,7 @@ const Scan: FC = () => {
 
   return (
     <div className='w-screen h-screen'>
-      <video id='video' playsInline={false} className='w-full h-full absolute top-0 left-0 right-0' style={{
-        transform: 'rotateY(180deg)'
-      }}></video>
+      <video id='video' playsInline={false} controls={false} className='w-full h-full absolute top-0 left-0 right-0'></video>
       <Button type='button' color='white' icon={<ArrowLeftIcon />} className='absolute top-6 left-6' onClick={() => navigate(-1)} />
     </div>
   );

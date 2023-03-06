@@ -105,3 +105,19 @@ export const getProducts = async () => {
 
   return productsResult;
 };
+
+export const getProduct = async (id: string) => {
+  const productResult = await supabase
+  .from('products')
+  .select()
+  .eq('id', id)
+  .limit(1)
+  .single();
+  
+
+  if (productResult?.error) {
+    return { data: null, error: productResult.error.message };
+  }
+
+  return productResult;
+};

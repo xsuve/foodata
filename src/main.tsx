@@ -10,6 +10,7 @@ import Home from '@/pages/home/Home';
 import Error from '@/pages/error/Error';
 import Scan from '@/pages/scan/Scan';
 import Add from '@/pages/add/Add';
+import ProductPage from './pages/product-page/ProductPage';
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
   {
     path: '/add',
     element: <Add />
+  },
+  {
+    path: '/product/:id',
+    element: <ProductPage />
   }
 ]);
 
