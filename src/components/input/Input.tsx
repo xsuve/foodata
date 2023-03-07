@@ -9,7 +9,7 @@ interface InputProps {
   label?: string;
   register?: any;
   errors?: any;
-  validation?:any;
+  validation?: any;
   required?: boolean;
   className?: string;
 };
