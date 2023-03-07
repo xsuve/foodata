@@ -1,6 +1,5 @@
 export type ProductNutritionalInfo = {
   id?: string;
-  perWeight: number; // g
   energy: number; // kJ
   calories: number; // kCal
   fats: number; // g
@@ -13,13 +12,18 @@ export type ProductNutritionalInfo = {
   other: string;
 };
 
+export type ProductNetWeight = {
+  value: number;
+  unit: string;
+};
+
 export type Product = {
   id?: string;
   code: number;
   status: string;
   typeId: string;
   title: string;
-  weight: number;
+  netWeight: ProductNetWeight;
   marketId: string;
   price: number | null;
   nutritionalInfoId?: string;

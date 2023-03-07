@@ -9,7 +9,7 @@ interface InputProps {
   label?: string;
   register?: any;
   errors?: any;
-  validation?:any;
+  validation?: any;
   required?: boolean;
   className?: string;
 };
@@ -33,7 +33,7 @@ const Input: FC<InputProps> = ({
           type={type}
           name={name}
           placeholder={placeholder}
-          className={`w-full h-full text-[13px] font-poppins font-normal outline-none px-4 text-slate-500 placeholder:opacity-100 group-hover:placeholder:opacity-100 ${errors && errors[name] ? 'placeholder:text-red-400 group-hover:placeholder:text-red-400' : 'placeholder:text-slate-400 group-hover:placeholder:text-slate-500'}`}
+          className={`w-full h-full text-[13px] font-poppins font-light outline-none px-4 text-slate-500 placeholder:opacity-100 group-hover:placeholder:opacity-100 ${errors && errors[name] ? 'placeholder:text-red-400 group-hover:placeholder:text-red-400' : 'placeholder:text-slate-400 group-hover:placeholder:text-slate-500'}`}
           required={required}
           {...register(name, validation)}
         />
