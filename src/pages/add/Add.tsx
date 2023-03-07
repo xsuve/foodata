@@ -10,6 +10,7 @@ import { addProduct, checkCode } from '@/services/supabase';
 import { useMarkets } from '@/hooks/useMarkets';
 import { useTypes } from '@/hooks/useTypes';
 import Checks from '@/components/checks/Checks';
+import FileInput from '@/components/file-input/FileInput';
 
 type AddData = {
   images: FileList;
@@ -73,6 +74,8 @@ const Add: FC = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
+  const [fileInputText, setFileInputText] = useState('');
+
   const [checkedMarket, setCheckedMarket] = useState('');
   const [checkedType, setCheckedType] = useState('');
   const [checkedNetWeightUnit, setCheckedNetWeightUnit] = useState('g');
@@ -87,36 +90,32 @@ const Add: FC = () => {
 
   const submitAdd = async (addData: AddData, e: BaseSyntheticEvent | undefined) => {
     e?.preventDefault();
-    console.log(addData);
     
-    
-    // setLoading(true);
-    // const { error } = await addProduct({
-    //   code: state.code,
-    //   status: 'todo',
-    //   typeId: addData.typeId,
-    //   title: addData.title,
-    //   netWeight: {
-    //     value: addData.netWeightValue,
-    //     unit: addData.netWeightUnit
-    //   },
-    //   marketId: addData.marketId,
-    //   price: addData.price
-    // }, addData.images[0]);
+    setLoading(true);
+    const { error } = await addProduct({
+      code: state.code,
+      status: 'todo',
+      typeId: addData.typeId,
+      title: addData.title,
+      netWeightValue: addData.netWeightValue,
+      netWeightUnit: addData.netWeightUnit,
+      marketId: addData.marketId,
+      price: addData.price
+    }, addData.images[0]);
 
-    // if (error) {
-    //   setLoading(false);
-    //   setAlert({
-    //     type: 'error',
-    //     title: 'Add product error.',
-    //     text: error
-    //   });
-    //   return;
-    // }
+    if (error) {
+      setLoading(false);
+      setAlert({
+        type: 'error',
+        title: 'Add product error.',
+        text: error
+      });
+      return;
+    }
 
-    // setLoading(false);
-    // navigate('/');
-    // reset();
+    setLoading(false);
+    navigate('/');
+    reset();
   };
 
   return (
@@ -141,13 +140,16 @@ const Add: FC = () => {
             :
               <form className='w-full flex flex-col gap-y-6' onSubmit={handleSubmit(submitAdd)} autoComplete='off' noValidate>
                 <div className='w-full flex flex-col gap-y-6'>
-                  <Input
-                    type='file'
+                  <FileInput
                     name='images'
-                    placeholder='Product image'
                     label='Image'
+                    text={fileInputText !== '' ? (fileInputText.length > 30 ? fileInputText.substring(0, 30) + '...' : fileInputText) : 'Nutritional info image'}
                     errors={errors}
                     register={register}
+                    validation={{
+                      required: 'This field is required.',
+                    }}
+                    onChange={(image) => setFileInputText(image.name)}
                   />
                   <Checks
                     label='Market'
