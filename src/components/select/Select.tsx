@@ -58,15 +58,15 @@ const Select: FC<SelectProps> = ({
         classNames={{
           control: () => `!rounded !h-[45px] group !border !border-slate-200 !hover:border-slate-300 !shadow-none`,
           valueContainer: () => `!px-4`,
-          placeholder: () => `!text-[13px] !mx-0 font-poppins font-normal !text-slate-400 !group-hover:text-slate-500`,
-          input: () => `!text-[13px] !m-0 !py-0 font-poppins font-normal !text-slate-400 !group-hover:text-slate-500`,
-          singleValue: () => `!text-[13px] !mx-0 font-poppins font-normal !text-slate-500`,
+          placeholder: () => `!text-[13px] !mx-0 font-poppins font-light !text-slate-400 !group-hover:text-slate-500`,
+          input: () => `!text-[13px] !m-0 !py-0 font-poppins font-light !text-slate-400 !group-hover:text-slate-500`,
+          singleValue: () => `!text-[13px] !mx-0 font-poppins font-light !text-slate-500`,
           indicatorSeparator: () => `!bg-slate-200 !group-hover:bg-slate-300`,
           indicatorsContainer: () => `!text-slate-200 !group-hover:text-slate-300`,
           menu: () => `!rounded !shadow-none !border !border-slate-200`,
           menuList: () => `!py-0`,
-          option: () => `!text-[13px] font-poppins font-normal !text-slate-600`,
-          noOptionsMessage: () => `!text-[11px] font-poppins font-normal !text-slate-400 !text-left`
+          option: () => `!text-[13px] font-poppins font-light !text-slate-600`,
+          noOptionsMessage: () => `!text-[11px] font-poppins font-light !text-slate-400 !text-left`
         }}
       />
       { errors && errors[name]?.type === 'required' ? <Text type='text' color='red' className='!text-xs mt-1'>{errors[name]?.message}</Text> : null }
