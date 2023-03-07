@@ -15,7 +15,8 @@ type AddData = {
   images: FileList;
   typeId: SelectPropsOption;
   title: string;
-  weight: number;
+  netWeightValue: number;
+  netWeightUnit: string;
   marketId: SelectPropsOption;
   price: number | null;
 };
@@ -27,7 +28,7 @@ const Add: FC = () => {
       meta.setAttribute('content', '#f3f4f6');
     }
   }, []);
-  
+
   const markets = useMarkets();
   const types = useTypes();
   
@@ -89,7 +90,10 @@ const Add: FC = () => {
       status: 'todo',
       typeId: addData.typeId.value,
       title: addData.title,
-      weight: addData.weight,
+      netWeight: {
+        value: addData.netWeightValue,
+        unit: addData.netWeightUnit
+      },
       marketId: addData.marketId.value,
       price: addData.price
     }, addData.images[0]);
@@ -175,9 +179,9 @@ const Add: FC = () => {
               />
               <Input
                 type='text'
-                name='weight'
-                placeholder='Product weight in grams'
-                label='Weight (g)'
+                name='netWeightValue'
+                placeholder='Product net weight'
+                label='Net weight'
                 errors={errors}
                 register={register}
                 validation={{

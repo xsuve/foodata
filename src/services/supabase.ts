@@ -10,7 +10,6 @@ export const addProduct = async (product: Product, image: File) => {
   const productNutritionalInfoResult = await supabase
   .from('product_nutritional_info')
   .insert({
-    perWeight: null,
     energy: null,
     calories: null,
     fats: null,
