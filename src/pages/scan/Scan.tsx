@@ -1,40 +1,52 @@
-import React, { FC, useEffect } from 'react';
-import { BrowserCodeReader, BrowserMultiFormatOneDReader } from '@zxing/browser';
+import React, { FC, useEffect, useRef } from 'react';
+import { Html5Qrcode } from 'html5-qrcode';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Button from '@/components/button/Button';
 
 const Scan: FC = () => {
   const navigate = useNavigate();
-
-  const handleInit = async () => {
-    const reader = new BrowserMultiFormatOneDReader();
-
-    const webcamDevices = await BrowserCodeReader.listVideoInputDevices();
-    const selectedDeviceId = webcamDevices[0].deviceId;
-
-    const videoElement: any = document.getElementById('video');
-
-    if (videoElement) {
-      const controls = await reader.decodeFromVideoDevice(selectedDeviceId, videoElement, (result, error, controls) => {
-        if (result) {
-          controls.stop();
-          navigate('/add', { state: { code: result.getText() } });
-        }
-      });
-
-      setTimeout(() => controls.stop(), 60000);
-    }
-  };
+  const cameraRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    handleInit();
-  }, []);
+    if (!cameraRef.current) {
+      return;
+    }
+
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) {
+      meta.setAttribute('content', '#000000');
+    }
+
+    const scanner = new Html5Qrcode(cameraRef.current.id);
+    const scannerStarted = scanner.start(
+      { facingMode:  'environment' },
+      {
+        fps: 10,
+        qrbox: { width: 200, height: 100 }
+      },
+      (_, result) => {
+        navigate('/add', { state: { code: result.decodedText } });
+      },
+      (_, error) => {
+        // console.log(error);
+      }
+    ).catch(error => {
+      console.log(error);
+      
+    });
+
+    return () => {
+      scannerStarted.then(() => scanner.stop()).catch(_ => true);
+    };
+  }, [cameraRef]);
 
   return (
-    <div className='w-screen h-screen'>
-      <video id='video' playsInline={false} controls={false} className='w-full h-full absolute top-0 left-0 right-0'></video>
-      <Button type='button' color='white' icon={<ArrowLeftIcon />} className='absolute top-6 left-6' onClick={() => navigate(-1)} />
+    <div className='w-screen h-screen bg-black'>
+      <div id='camera' className='w-full object-fill' ref={cameraRef}></div>
+      <Button type='button' color='white' icon={<ArrowLeftIcon />} className='absolute top-6 left-6' onClick={() => {
+        navigate('/');
+      }} />
     </div>
   );
 };
