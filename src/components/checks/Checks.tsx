@@ -26,7 +26,7 @@ const Checks: FC<ChecksProps> = ({
   errors = undefined,
   validation = undefined,
   options,
-  onChange,
+  onChange = undefined,
   className = ''
 }) => {
   const handleChange = (e: any) => {

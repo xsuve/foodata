@@ -44,12 +44,12 @@ const Button: FC<ButtonProps> = ({
   return (
     <button
       type={type}
-      className={`flex flex-row items-center justify-center ${(icon && !children) ? 'rounded-full w-10 h-10' : 'rounded h-10 px-5'} ${ButtonPropsColorMap[color]} ${(disabled || loading) ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
+      className={`flex flex-row gap-x-4 items-center justify-center ${(icon && !children) ? 'rounded-full w-10 h-10' : 'rounded h-10 px-5'} ${ButtonPropsColorMap[color]} ${(disabled || loading) ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
       disabled={disabled || loading}
       onClick={onClick}
     >
       { (icon && !children) && _icon }
-      { loading && <ArrowPathIcon className={`rounded-full w-10 h-10 ${ButtonIconPropsColorMap[color]} leading-none animate-spin`} /> }
+      { loading && <ArrowPathIcon className={`rounded-full w-5 h-5 ${ButtonIconPropsColorMap[color]} leading-none animate-spin`} /> }
       { children && <span className={`font-space-grotesk font-medium text-sm`}>{children}</span> }
     </button>
   );

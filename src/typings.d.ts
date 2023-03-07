@@ -12,18 +12,14 @@ export type ProductNutritionalInfo = {
   other: string;
 };
 
-export type ProductNetWeight = {
-  value: number;
-  unit: string;
-};
-
 export type Product = {
   id?: string;
   code: number;
   status: string;
   typeId: string;
   title: string;
-  netWeight: ProductNetWeight;
+  netWeightValue: number;
+  netWeightUnit: string;
   marketId: string;
   price: number | null;
   nutritionalInfoId?: string;
