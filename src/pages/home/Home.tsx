@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import Text from '@/components/text/Text';
 import Button from '@/components/button/Button';
 import { PlusIcon } from '@heroicons/react/24/outline';
@@ -7,13 +7,6 @@ import { useProducts } from '@/hooks/useProducts';
 import ProductBox from '@/components/product-box/ProductBox';
 
 const Home: FC = () => {
-  useEffect(() => {
-    const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) {
-      meta.setAttribute('content', '#f3f4f6');
-    }
-  }, []);
-
   const navigate = useNavigate();
   const products = useProducts();
   

@@ -22,13 +22,6 @@ type AddData = {
 };
 
 const Add: FC = () => {
-  useEffect(() => {
-    const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) {
-      meta.setAttribute('content', '#f3f4f6');
-    }
-  }, []);
-
   const markets = useMarkets();
   const types = useTypes();
   

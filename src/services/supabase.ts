@@ -150,3 +150,11 @@ export const getProduct = async (id: string) => {
 
   return productResult;
 };
+
+export const getProductImage = async (id: string) => {
+  const productImageResult = await supabase.storage
+  .from('product-images')
+  .getPublicUrl(`${id}/nutritional-info.jpg`);
+
+  return productImageResult;
+};
