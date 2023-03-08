@@ -1,22 +1,24 @@
-import React, { cloneElement, FC } from 'react';
+import React, { cloneElement, FC, ReactNode } from 'react';
 import { ArrowPathIcon } from '@heroicons/react/24/outline'; 
 
 type ButtonPropsType = 'submit' | 'button';
 
-type ButtonPropsColor = 'blue' | 'white';
+type ButtonPropsColor = 'blue' | 'white' | 'red';
 const ButtonPropsColorMap = {
   'blue': 'bg-blue-500 text-white',
-  'white': 'bg-white text-blue-500'
+  'white': 'bg-white text-blue-500',
+  'red': 'bg-red-500 text-white'
 };
 const ButtonIconPropsColorMap = {
   'blue': 'text-white',
-  'white': 'text-blue-500'
+  'white': 'text-blue-500',
+  'red': 'text-white'
 };
 
 interface ButtonProps {
   type: ButtonPropsType;
   color: ButtonPropsColor;
-  children?: JSX.Element | string;
+  children?: ReactNode;
   icon?: JSX.Element;
   loading?: boolean;
   disabled?: boolean;

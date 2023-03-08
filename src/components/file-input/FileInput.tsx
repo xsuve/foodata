@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react';
 import Text from '@/components/text/Text';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
+import { compressImage } from '@/utils/file';
 
 interface FileInputProps {
   name: string;
@@ -10,7 +11,7 @@ interface FileInputProps {
   errors?: any;
   validation?: any;
   required?: boolean;
-  onChange?: (image: File) => void;
+  onChange?: (imageBlob: Blob, imageName: string) => void;
   className?: string;
 };
 
@@ -25,15 +26,31 @@ const FileInput: FC<FileInputProps> = ({
   onChange = undefined,
   className = ''
 }) => {
-  const [imageURL, setImageURL] = useState<string | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: any) => {
+  const handleChange = async (e: any) => {
     e?.stopPropagation();
     
+    setLoading(true);
+    
     if (onChange && e.target && e.target.files) {
-      onChange(e.target.files[0]);
+      const compressedImage: any = await compressImage(e.target.files[0], {
+        maxWidth: 500,
+        maxHeight: 300,
+        quality: 0.8,
+        type: 'image/jpg'
+      });
+      
+      if (!compressedImage) {
+        console.log('Compress image error.');
+        setLoading(false);
+        return;
+      }
 
-      setImageURL(URL.createObjectURL(e.target.files[0]));
+      onChange(compressedImage, e.target.files[0]?.name);
+      setPreviewImage(URL.createObjectURL(e.target.files[0]));
+      setLoading(false);
     }
   };
 
@@ -43,8 +60,8 @@ const FileInput: FC<FileInputProps> = ({
       <div className='flex gap-x-4 items-center'>
         <div
           className={`flex justify-center items-center overflow-hidden relative rounded w-[45px] h-[45px] bg-white group border ${errors && errors[name] ? 'border-red-400 hover:border-red-400' : 'border-slate-200 hover:border-slate-300'}`}
-          style={imageURL ? {
-            backgroundImage: `url('${imageURL}')`,
+          style={previewImage ? {
+            backgroundImage: `url('${previewImage}')`,
             backgroundSize: 'cover'
           } : {}}
           onChange={handleChange}
@@ -57,7 +74,8 @@ const FileInput: FC<FileInputProps> = ({
             accept='image/*'
             {...register(name, validation)}
           />
-          { !imageURL && <PlusIcon className='w-5 h-5 text-slate-700' /> }
+          { !previewImage && !loading && <PlusIcon className='w-5 h-5 text-slate-700' /> }
+          { !previewImage && loading && <ArrowPathIcon className='w-5 h-5 text-slate-700 animate-spin' /> }
         </div>
         <Text type='text' color='light'>{text}</Text>
       </div>

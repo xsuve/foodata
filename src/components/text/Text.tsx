@@ -21,6 +21,7 @@ interface TextProps {
   type: TextPropsType;
   color: TextPropsColor;
   children: ReactNode;
+  onClick?: () => void;
   className?: string;
 };
 
@@ -28,10 +29,11 @@ const Text: FC<TextProps> = ({
   type,
   color,
   children,
+  onClick = undefined,
   className = ''
 }) => {
   return (
-    <div className={`inline-block ${TextPropsTypeMap[type]} ${TextPropsColorMap[color]} ${className}`}>{children}</div>
+    <div className={`inline-block ${TextPropsTypeMap[type]} ${TextPropsColorMap[color]} ${className}`} onClick={onClick}>{children}</div>
   );
 };
 
