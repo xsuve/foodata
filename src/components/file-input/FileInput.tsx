@@ -36,8 +36,8 @@ const FileInput: FC<FileInputProps> = ({
     
     if (onChange && e.target && e.target.files) {
       const compressedImage: any = await resizeImage(e.target.files[0], {
-        maxSize: 700,
-        quality: 0.85,
+        maxSize: 800,
+        quality: 0.825,
         type: 'image/jpg'
       });
       
