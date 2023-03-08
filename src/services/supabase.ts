@@ -110,19 +110,6 @@ export const getTypes = async () => {
   return typesResult;
 };
 
-export const checkCode = async (code: number) => {
-  const checkCodeResult = await supabase
-  .from('products')
-  .select('code', { count: 'exact', head: true })
-  .eq('code', code);
-
-  if (checkCodeResult?.error) {
-    return { data: null, error: checkCodeResult.error.message };
-  }
-
-  return { count: checkCodeResult.count, error: null };
-};
-
 export const getProducts = async () => {
   const productsResult = await supabase
   .from('products')
@@ -140,6 +127,22 @@ export const getProduct = async (id: string) => {
   .from('products')
   .select()
   .eq('id', id)
+  .limit(1)
+  .single();
+  
+
+  if (productResult?.error) {
+    return { data: null, error: productResult.error.message };
+  }
+
+  return productResult;
+};
+
+export const getProductByCode = async (code: number) => {
+  const productResult = await supabase
+  .from('products')
+  .select()
+  .eq('code', code)
   .limit(1)
   .single();
   
