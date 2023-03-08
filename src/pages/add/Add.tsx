@@ -36,11 +36,6 @@ const Add: FC = () => {
     const productResult = await getProductByCode(code);    
     
     if (productResult?.error) {
-      setAlert({
-        type: 'error',
-        title: 'Code check error.',
-        text: productResult.error
-      });
       return;
     }
 
