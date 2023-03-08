@@ -1,12 +1,13 @@
 import React, { BaseSyntheticEvent, FC, useEffect, useState } from 'react';
 import Text from '@/components/text/Text';
-import { useLocation, useNavigate, Navigate } from 'react-router-dom';
+import { useLocation, useNavigate, Navigate, Link } from 'react-router-dom';
+import { DateTime } from 'luxon';
 import Button from '@/components/button/Button';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { useForm } from 'react-hook-form';
 import Alert, { AlertProps } from '@/components/alert/Alert';
 import Input from '@/components/input/Input';
-import { addProduct, checkCode } from '@/services/supabase';
+import { addProduct, getProductByCode } from '@/services/supabase';
 import { useMarkets } from '@/hooks/useMarkets';
 import { useTypes } from '@/hooks/useTypes';
 import Checks from '@/components/checks/Checks';
@@ -30,31 +31,20 @@ const Add: FC = () => {
 
   const [alert, setAlert] = useState<AlertProps>();
 
-  const [codeValid, setCodeValid] = useState(false);
+  const [productByCode, setProductByCode] = useState<any>();
   const checkExists = async (code: number) => {
-    const checkExistsResult = await checkCode(code);    
+    const productResult = await getProductByCode(code);    
     
-    if (checkExistsResult?.error) {
+    if (productResult?.error) {
       setAlert({
         type: 'error',
         title: 'Code check error.',
-        text: checkExistsResult.error
+        text: productResult.error
       });
-      setCodeValid(false);
       return;
     }
 
-    if (checkExistsResult.count && checkExistsResult.count > 0) {
-      setAlert({
-        type: 'error',
-        title: 'Code already exists.',
-        text: 'This code has already been added.'
-      });
-      setCodeValid(false);
-      return;
-    }
-
-    setCodeValid(true);
+    setProductByCode(productResult?.data);
   };
   useEffect(() => {
     if (!state?.code) {
@@ -125,11 +115,17 @@ const Add: FC = () => {
             </div>
           </div>
           <div>
-            { !codeValid
+            { productByCode
             ?
-              <>
-                { alert ? <Alert {...alert} /> : null }
-              </>
+              <div className='flex flex-col gap-y-2'>
+                <Text type='text' color='light'>A product with this code already exists:</Text>
+                <div className='flex justify-between items-center'>
+                  <Link to={`/product/${productByCode.id}`}>
+                    <Text type='label' color='dark' className='!text-base'>{productByCode.title}</Text>
+                  </Link>
+                  <Text type='text' color='light'>{DateTime.fromISO(productByCode.createdAt).toFormat('MMMM dd, yyyy')}</Text>
+                </div>
+              </div>
             :
               <form className='w-full flex flex-col gap-y-6' onSubmit={handleSubmit(submitAdd)} autoComplete='off' noValidate>
                 <div className='w-full flex flex-col gap-y-6'>

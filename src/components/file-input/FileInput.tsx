@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import Text from '@/components/text/Text';
 import { PlusIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
-import { compressImage } from '@/utils/file';
+import { resizeImage } from '@/utils/file';
 
 interface FileInputProps {
   name: string;
@@ -35,10 +35,9 @@ const FileInput: FC<FileInputProps> = ({
     setLoading(true);
     
     if (onChange && e.target && e.target.files) {
-      const compressedImage: any = await compressImage(e.target.files[0], {
-        maxWidth: 720,
-        maxHeight: 720,
-        quality: 0.8,
+      const compressedImage: any = await resizeImage(e.target.files[0], {
+        maxSize: 700,
+        quality: 0.85,
         type: 'image/jpg'
       });
       
