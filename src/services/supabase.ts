@@ -6,10 +6,24 @@ const supabase = createClient(
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
-export const addProduct = async (product: Product, image: File) => {
+export const addProduct = async (product: Product, imageBlob: Blob) => {
+  const productResult = await supabase
+  .from('products')
+  .insert({
+    ...product
+  })
+  .select()
+  .limit(1)
+  .single();
+
+  if (productResult?.error) {
+    return { data: null, error: productResult.error.message };
+  }
+
   const productNutritionalInfoResult = await supabase
   .from('product_nutritional_info')
   .insert({
+    productId: productResult.data.id,
     energy: null,
     calories: null,
     fats: null,
@@ -29,23 +43,9 @@ export const addProduct = async (product: Product, image: File) => {
     return { data: null, error: productNutritionalInfoResult.error.message };
   }
 
-  const productResult = await supabase
-  .from('products')
-  .insert({
-    ...product,
-    nutritionalInfoId: productNutritionalInfoResult.data.id
-  })
-  .select()
-  .limit(1)
-  .single();
-
-  if (productResult?.error) {
-    return { data: null, error: productResult.error.message };
-  }
-
   const productImageResult = await supabase.storage
   .from('product-images')
-  .upload(`${productResult.data.id}/1.jpg`, image, {
+  .upload(`${productResult.data.id}/nutritional-info.jpg`, imageBlob, {
     upsert: true
   });
 
@@ -54,6 +54,36 @@ export const addProduct = async (product: Product, image: File) => {
   }
 
   return productResult;
+};
+
+export const deleteProduct = async (id: string) => {
+  const productDeleteProductNutritionalInfoResult = await supabase
+  .from('product_nutritional_info')
+  .delete()
+  .eq('productId', id);
+
+  if (productDeleteProductNutritionalInfoResult?.error) {
+    return { data: null, error: productDeleteProductNutritionalInfoResult.error.message };
+  }
+
+  const productDeleteProductResult = await supabase
+  .from('products')
+  .delete()
+  .eq('id', id);
+
+  if (productDeleteProductResult?.error) {
+    return { data: null, error: productDeleteProductResult.error.message };
+  }
+
+  const productDeleteImageResult = await supabase.storage
+  .from('product-images')
+  .remove([`${id}/nutritional-info.jpg`]);
+
+  if (productDeleteImageResult?.error) {
+    return { data: null, error: productDeleteImageResult.error.message };
+  }
+
+  return productDeleteProductResult;
 };
 
 export const getMarkets = async () => {

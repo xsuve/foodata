@@ -13,7 +13,6 @@ import Checks from '@/components/checks/Checks';
 import FileInput from '@/components/file-input/FileInput';
 
 type AddData = {
-  images: FileList;
   typeId: string;
   title: string;
   netWeightValue: number;
@@ -74,6 +73,7 @@ const Add: FC = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
+  const [imageBlob, setImageBlob] = useState<any>();
   const [fileInputText, setFileInputText] = useState('');
 
   const [checkedMarket, setCheckedMarket] = useState('');
@@ -100,8 +100,8 @@ const Add: FC = () => {
       netWeightValue: addData.netWeightValue,
       netWeightUnit: addData.netWeightUnit,
       marketId: addData.marketId,
-      price: addData.price
-    }, addData.images[0]);
+      price: addData.price || null
+    }, imageBlob);
 
     if (error) {
       setLoading(false);
@@ -149,7 +149,10 @@ const Add: FC = () => {
                     validation={{
                       required: 'This field is required.',
                     }}
-                    onChange={(image) => setFileInputText(image.name)}
+                    onChange={(imageBlob, imageName) => {
+                      setImageBlob(imageBlob);
+                      setFileInputText(imageName);
+                    }}
                   />
                   <Checks
                     label='Market'
