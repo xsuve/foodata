@@ -3,7 +3,7 @@ import Text from '@/components/text/Text';
 import Button from '@/components/button/Button';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { useNavigate, useParams } from 'react-router-dom';
-import { deleteProduct, getProduct } from '@/services/supabase';
+import { deleteProduct, getProduct, getProductImage } from '@/services/supabase';
 import Alert, { AlertProps } from '@/components/alert/Alert';
 
 const ProductPage: FC = () => {
@@ -11,9 +11,10 @@ const ProductPage: FC = () => {
   const navigate = useNavigate();
 
   const [product, setProduct] = useState<any>();
+  const [productImage, setProductImage] = useState('');
   useEffect(() => {
     const fetchProduct = async (id: string) => {
-      const { data, error } = await getProduct(id);      
+      const { data, error } = await getProduct(id);
 
       if (error) {
         return;
@@ -22,8 +23,19 @@ const ProductPage: FC = () => {
       setProduct(data);
     };
 
+    const fetchProductImage = async (id: string) => {
+      const { data } = await getProductImage(id);
+
+      if (!data) {
+        return;
+      }
+  
+      setProductImage(data.publicUrl);
+    };
+
     if (params && params.id) {
       fetchProduct(params.id);
+      fetchProductImage(params.id);
     }
   }, [params]);
 
@@ -59,6 +71,10 @@ const ProductPage: FC = () => {
           <Text type='label' color='dark'>Code:</Text>
           <Text type='text' color='light'>{product?.code}</Text>
         </div>
+        <div className='flex gap-x-2 mt-2'>
+          <Text type='label' color='dark'>ID:</Text>
+          <Text type='text' color='light'>{product?.id}</Text>
+        </div>
       </div>
       <div>
         <div className='flex gap-x-6 border-b border-b-slate-200 pb-3'>
@@ -76,7 +92,10 @@ const ProductPage: FC = () => {
             //
           </div>
           <div className={activeTab === 'process' ? 'block' : 'hidden'}>
-            //
+            <Text type='label' color='dark'>Nutritional info image</Text>
+            <div className='w-full mt-2'>
+              <img src={productImage} className='max-w-full' />
+            </div>
           </div>
           <div className={`flex flex-col gap-y-6 ${activeTab === 'actions' ? 'block' : 'hidden'}`}>
             <div>

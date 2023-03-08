@@ -13,11 +13,6 @@ const Scan: FC = () => {
       return;
     }
 
-    const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) {
-      meta.setAttribute('content', '#000000');
-    }
-
     const scanner = new Html5Qrcode(cameraRef.current.id);
     const scannerStarted = scanner.start(
       { facingMode:  'environment' },
